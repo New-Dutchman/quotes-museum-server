@@ -327,6 +327,19 @@ public class QuotesRepository{
         }
     }
 
+    public List<QuotesDTO> searchQuote(String quote) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        String query = "SELECT * FROM search_quote_by_quotation(?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, quote);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        connection.close();
+
+        return getQuotesDTOS(resultSet);
+    }
+
     private List<QuotesDTO> getQuotesDTOS(ResultSet resultSet) throws SQLException {
         List<QuotesDTO> quotes = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();

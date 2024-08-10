@@ -16,7 +16,7 @@ public class AuthController {
 
     @PostMapping("/sign-in")
     public @ResponseBody JwtAuthenticationResponse signIn(@RequestBody @Valid User user){
-        return authService.SignIn(user.username, user.password);
+        return authService.SignIn(user.username,  user.password);
     }
 
 

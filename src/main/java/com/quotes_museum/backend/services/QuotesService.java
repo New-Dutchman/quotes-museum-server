@@ -20,8 +20,6 @@ public class QuotesService {
     private final QuotesRepository quotesRepository;
 
     public List<String> getCoreTable(String table) throws SQLException {
-        QuotesRepository.CoreTables t;
-
         switch (table) {
             case "attrs" -> {
                 return quotesRepository.getCoreTable(QuotesRepository.CoreTables.attrs);
@@ -84,6 +82,10 @@ public class QuotesService {
 
     public boolean addOwner(String owner, String description, Principal principal){
         return quotesRepository.addOwner(owner, description, principal.getName());
+    }
+
+    public List<QuotesDTO> searchQuote(String quote) throws SQLException {
+        return quotesRepository.searchQuote(quote);
     }
 
 }

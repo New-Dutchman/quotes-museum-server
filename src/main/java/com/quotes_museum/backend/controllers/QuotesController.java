@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +25,11 @@ public class QuotesController {
     @GetMapping("/core-table")
     public @ResponseBody List<String> getCoreTable(String table) throws SQLException {
         return quotesService.getCoreTable(table);
+    }
+
+    @GetMapping("/search")
+    public @ResponseBody List<QuotesDTO> searchQuote(String quote) throws SQLException {
+        return quotesService.searchQuote(quote);
     }
 
     @GetMapping("/owners")
