@@ -34,9 +34,14 @@ public class QuotesService {
         }
     }
 
-    public List<QuotesDTO> getfavQuotes(Principal principal) throws SQLException {
+    public List<QuotesDTO> getFavQuotes(Principal principal) throws SQLException {
 
         return quotesRepository.getFavQuotes(principal.getName());
+    }
+
+    public List<QuotesDTO> getAddedQuotes(Principal principal) throws SQLException {
+
+        return quotesRepository.getAddedQuotes(principal.getName());
     }
 
     public List<QuotesDTO> getOwnerQuotes(String owner) throws SQLException {
@@ -46,6 +51,11 @@ public class QuotesService {
     public boolean addFavouriteQuote(Principal principal, QuotesDTO quote) {
 
         return quotesRepository.addFavouriteQuote(principal.getName(), quote.getId());
+    }
+
+    public boolean removeFavouriteQuote(Principal principal, int quoteId) {
+
+        return quotesRepository.removeFavouriteQuote(principal.getName(), quoteId) == 1;
     }
 
     public boolean insertQuote(QuotesDTO quote, Principal principal){

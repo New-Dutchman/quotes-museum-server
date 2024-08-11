@@ -23,12 +23,22 @@ public class AccountController {
 
     @GetMapping("/fav-quotes")
     public @ResponseBody List<QuotesDTO> getFavQuotes(Principal principal) throws SQLException {
-        return quotesService.getfavQuotes(principal);
+        return quotesService.getFavQuotes(principal);
+    }
+
+    @GetMapping("/owning")
+    public @ResponseBody List<QuotesDTO> getAddedCards(Principal principal) throws SQLException {
+        return quotesService.getAddedQuotes(principal);
     }
 
     @PutMapping("/add-fav")
     public @ResponseBody boolean addFavouriteQuote(@RequestBody @Valid QuotesDTO quote, Principal principal){
         return quotesService.addFavouriteQuote(principal, quote);
+    }
+
+    @DeleteMapping("/remove-fav")
+    public @ResponseBody boolean removeFavouriteQuote(@Valid int quoteId, Principal principal) {
+        return quotesService.removeFavouriteQuote(principal, quoteId);
     }
 
     @PostMapping("/add-quote")

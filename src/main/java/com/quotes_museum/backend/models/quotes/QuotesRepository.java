@@ -89,6 +89,18 @@ public class QuotesRepository{
 
         return getQuotesDTOS(resultSet);
     }
+    public List<QuotesDTO> getAddedQuotes(String user) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        Statement statement = connection.createStatement();
+
+        String query = "SELECT * FROM get_added_quotes('" + user + "');";
+
+        ResultSet resultSet = statement.executeQuery(query);
+        connection.close();
+
+        return getQuotesDTOS(resultSet);
+    }
 
     public boolean addFavouriteQuote(String owner, int quoteId){
         try {
@@ -107,6 +119,30 @@ public class QuotesRepository{
         } catch (SQLException e) {
             System.out.println("exception in sql while adding cite: " + e.getMessage());
             return false;
+        }
+    }
+
+    public int removeFavouriteQuote(String owner, int quoteId){
+        try {
+            Connection connection = dataSource.getConnection();
+
+            String query = """
+                            DELETE FROM internal.favorite_quotes\s
+                            WHERE quote_id = ? AND user_id =\s
+                                                      (SELECT user_id FROM internal.users WHERE user_name = ?);
+                            """;
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, quoteId);
+            preparedStatement.setString(2, owner);
+
+            int res = preparedStatement.executeUpdate();
+            connection.close();
+
+            return res;
+        } catch (SQLException e) {
+            System.out.println("exception in sql while adding cite: " + e.getMessage());
+            return -1;
         }
     }
 
