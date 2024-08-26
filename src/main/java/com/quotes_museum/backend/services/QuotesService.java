@@ -2,8 +2,11 @@ package com.quotes_museum.backend.services;
 
 import com.quotes_museum.backend.models.quotes.QuotesDTO;
 import com.quotes_museum.backend.models.quotes.QuotesRepository;
+import com.quotes_museum.backend.security.user.QuotatorUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -64,8 +67,13 @@ public class QuotesService {
     }
 
     public String updateQuote(QuotesDTO quote, boolean q, boolean a, boolean f, Principal principal) {
+        boolean isFarda = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_FARDA"));
 
-        if (!quotesRepository.isUpdatePermitted(quote, principal.getName())) return "not permitted to take others!";
+    if (!(quotesRepository.isUpdatePermitted(quote, principal.getName()) || isFarda)) return "not permitted to take others!";
 
         boolean quoteUpdate = true;
         boolean attrsUpdate = true;
@@ -85,7 +93,13 @@ public class QuotesService {
     }
 
     public boolean deleteQuote(int id, Principal principal) {
-        if (!quotesRepository.isUpdatePermitted(id, principal.getName())) return false;
+        boolean isFarda = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_FARDA"));
+
+        if (!(quotesRepository.isUpdatePermitted(id, principal.getName()) || isFarda)) return false;
 
         return quotesRepository.deleteQuote(id);
     }
