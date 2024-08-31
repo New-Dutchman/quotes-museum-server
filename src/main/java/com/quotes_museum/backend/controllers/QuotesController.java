@@ -36,4 +36,9 @@ public class QuotesController {
     public @ResponseBody List<QuotesDTO> getOwnerQuotes(String owner) throws SQLException {
         return quotesService.getOwnerQuotes(owner);
     }
+
+    @GetMapping("/random")
+    public @ResponseBody QuotesDTO getRandomQuote() throws SQLException {
+        return quotesService.getRandomQuote();
+    }
 }

@@ -112,4 +112,8 @@ public class QuotesService {
         return quotesRepository.searchQuote(quote);
     }
 
+    public QuotesDTO getRandomQuote() throws SQLException {
+        return quotesRepository.getRandomQuote();
+    }
+
 }

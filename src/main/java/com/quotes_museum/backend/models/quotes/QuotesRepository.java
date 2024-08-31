@@ -15,6 +15,8 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Random;
+
 @RequiredArgsConstructor
 @Component
 public class QuotesRepository{
@@ -374,6 +376,29 @@ public class QuotesRepository{
         connection.close();
 
         return getQuotesDTOS(resultSet);
+    }
+
+    public QuotesDTO getRandomQuote() throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        String getCount = "SELECT COUNT(quotation) FROM quotes;";
+        Statement statement = connection.createStatement();
+
+        ResultSet countSet = statement.executeQuery(getCount);
+        countSet.next();
+        int count = countSet.getInt(1);
+        Random rand = new Random();
+        int n = rand.nextInt(count) + 1;
+
+        String query = "SELECT * FROM get_quote_by_number(?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setInt(1, n);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        connection.close();
+
+        return getQuotesDTOS(resultSet).get(0);
     }
 
     private List<QuotesDTO> getQuotesDTOS(ResultSet resultSet) throws SQLException {
