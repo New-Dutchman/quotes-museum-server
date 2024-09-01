@@ -5,10 +5,7 @@ import com.quotes_museum.backend.services.QuotesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,8 +25,8 @@ public class QuotesController {
     }
 
     @GetMapping("/search")
-    public @ResponseBody List<QuotesDTO> searchQuote(String quote) throws SQLException {
-        return quotesService.searchQuote(quote);
+    public @ResponseBody List<QuotesDTO> searchQuote(String quote, @RequestParam(required=false) List<String> features, @RequestParam(required = false) boolean negative) throws SQLException {
+        return features != null? quotesService.searchQuote(quote, features, negative) : quotesService.searchQuote(quote);
     }
 
     @GetMapping("/owners")

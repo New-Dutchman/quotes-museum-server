@@ -73,7 +73,7 @@ public class QuotesService {
                 .stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_FARDA"));
 
-    if (!(quotesRepository.isUpdatePermitted(quote, principal.getName()) || isFarda)) return "not permitted to take others!";
+        if (!(quotesRepository.isUpdatePermitted(quote, principal.getName()) || isFarda)) return "not permitted to take others!";
 
         boolean quoteUpdate = true;
         boolean attrsUpdate = true;
@@ -110,6 +110,10 @@ public class QuotesService {
 
     public List<QuotesDTO> searchQuote(String quote) throws SQLException {
         return quotesRepository.searchQuote(quote);
+    }
+
+    public List<QuotesDTO> searchQuote(String quote, List<String> features, boolean negative) throws SQLException {
+        return negative? quotesRepository.searchQuoteNegative(quote, features) : quotesRepository.searchQuote(quote, features);
     }
 
     public QuotesDTO getRandomQuote() throws SQLException {

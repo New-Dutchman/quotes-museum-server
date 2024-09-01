@@ -378,6 +378,38 @@ public class QuotesRepository{
         return getQuotesDTOS(resultSet);
     }
 
+    public List<QuotesDTO> searchQuote(String quote, List<String> features) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        Array featuresSqlArray = connection.createArrayOf("text", features.toArray());
+
+        String query = "SELECT * FROM search_quote_by_filter(?, ?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, quote);
+        preparedStatement.setArray(2, featuresSqlArray);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        connection.close();
+
+        return getQuotesDTOS(resultSet);
+    }
+
+    public List<QuotesDTO> searchQuoteNegative(String quote, List<String> features) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        Array featuresSqlArray = connection.createArrayOf("text", features.toArray());
+
+        String query = "SELECT * FROM search_quote_by_filter_negative(?, ?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, quote);
+        preparedStatement.setArray(2, featuresSqlArray);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        connection.close();
+
+        return getQuotesDTOS(resultSet);
+    }
+
     public QuotesDTO getRandomQuote() throws SQLException {
         Connection connection = dataSource.getConnection();
 
