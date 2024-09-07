@@ -64,7 +64,23 @@ public class QuotesRepository{
 
         return values;
     }
-    
+
+    public String getGroupDescription(String group) throws SQLException {
+        Connection connection = dataSource.getConnection();
+
+        String query = "SELECT description FROM owners WHERE owner = ?;";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, group);
+
+        ResultSet resultSet = statement.executeQuery();
+        connection.close();
+
+        resultSet.next();
+
+        return resultSet.getString(1);
+    }
+
     public List<QuotesDTO> getOwnerQuotes(String owner) throws SQLException {
 
         Connection connection = dataSource.getConnection();

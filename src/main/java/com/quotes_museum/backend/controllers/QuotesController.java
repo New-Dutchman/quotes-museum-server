@@ -24,6 +24,11 @@ public class QuotesController {
         return quotesService.getCoreTable(table);
     }
 
+    @GetMapping("/group-desc")
+    public @ResponseBody String getGroupDescription(String group) throws SQLException {
+        return quotesService.getGroupDescription(group);
+    }
+
     @GetMapping("/search")
     public @ResponseBody List<QuotesDTO> searchQuote(String quote, @RequestParam(required=false) List<String> features, @RequestParam(required = false) boolean negative) throws SQLException {
         return features != null? quotesService.searchQuote(quote, features, negative) : quotesService.searchQuote(quote);

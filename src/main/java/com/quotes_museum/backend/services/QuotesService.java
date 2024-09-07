@@ -37,6 +37,10 @@ public class QuotesService {
         }
     }
 
+    public String getGroupDescription(String group) throws SQLException {
+        return quotesRepository.getGroupDescription(group);
+    }
+
     public List<QuotesDTO> getFavQuotes(Principal principal) throws SQLException {
 
         return quotesRepository.getFavQuotes(principal.getName());
